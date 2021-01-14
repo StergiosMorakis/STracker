@@ -51,7 +51,7 @@ def get_progress(user_input, df):
 	ttl_hours_excl = df.hours.sum()
 	ttl_hours_incl = ttl_hours_excl + user_input['hours']
 	messagebox.showinfo('Information', 
-						'You have worked in total {} hours so far.\n'.format(ttl_hours_excl) + \
+						'{} hours have been recorded so far.\n'.format(ttl_hours_excl) + \
 						'Updating to {} hours '.format(ttl_hours_incl) + \
 		   				'(incl. the inserted {} hours).'.format(user_input['hours']))
 	if user_input['review_todo']==1:
