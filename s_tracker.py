@@ -9,7 +9,7 @@ import tkinter as tk
 
 # global vars
 WORKSPACE = './workspace'
-ICONFILE = './resources/icon.ico'
+ICON_FILE = './resources/icon.ico'
 TITLE = 'S. Tracker'
 
 def load_progress(user_input, filename: str):
@@ -79,6 +79,8 @@ def save_progress(df, filename: str):
 		os.mkdir(path)
 	filepath = os.path.join(path, f'{filename}.csv')
 	df.to_csv(filepath, index=False)
+	messagebox.showinfo('Information', 
+						'File was saved successfully.\n{}').format(filepath)
 
 def main():
 
@@ -263,6 +265,7 @@ def main():
 		hours_label.grid(row=0, column=0, padx=(0,12), sticky=W)
 		hours_entry = Entry(hours_frame, width=4)
 		hours_entry.grid(row=0, column=1, pady=8, sticky=W)
+		hours_entry.focus_set()
 
 		# Note section
 		note_frame = Frame(main_frame)
@@ -386,8 +389,8 @@ def main():
 		ok_project_btn.grid(row=1, pady=20, columnspan=2)
 
 	root = Tk()
-	if os.path.exists(ICONFILE):
-		root.iconphoto(False, tk.PhotoImage(file=ICONFILE))
+	if os.path.exists(ICON_FILE):
+		root.iconphoto(False, tk.PhotoImage(file=ICON_FILE))
 	root.resizable(False, False)
 	project_name = StringVar()
 	main_menu()
