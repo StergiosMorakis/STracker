@@ -189,12 +189,15 @@ def main():
 											 columnspan=2, pady=(0, 22), sticky=EW)
 			gui_data[section]['entries'].append(entry)
 			gui_data[section]['row'] += 1
+			if gui_data[section]['row'] == 5:
+				gui_data[section]['btn_frame'].winfo_children()[0]["state"] = "disabled"
 
 		def clear_entries(frame, section):
 			for entry in gui_data[section]['entries']:
 				entry.destroy()
 			gui_data[section]['row'] = 0
 			gui_data[section]['entries'] = []
+			gui_data[section]['btn_frame'].winfo_children()[0]["state"] = "normal"
 			add_entry(frame, section)
 
 		def to_main_menu(frame):
