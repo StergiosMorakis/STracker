@@ -164,15 +164,19 @@ def main():
 		path = os.path.join(os.path.dirname(os.path.abspath(__file__)), WORKSPACE)
 		if not os.path.exists(path):
 			os.mkdir(path)
-		root.filename = filedialog.askopenfilename(initialdir=path, \
+		root.filename = filedialog.askopenfilename(initialdir=path, multiple=False,
 							title='Select Project', filetypes=(('csv files', '*.csv'),))
 		project_name.set(os.path.split(root.filename)[-1].split('.')[0])
 
 	def edit_project(frame):
-		project_name_parsed = project_name.get()
+		project_name_parsed = project_name.get().strip()
 		# validate project name
-		if re.search(r'^[A-z_]+$', project_name_parsed) is None:
-			messagebox.showerror('Error', 'Incorrect Project name!')
+		if not project_name_parsed:
+			messagebox.showerror('Error', 'Null Project Name!')
+			return
+		elif re.search(r'^[A-z_]+$', project_name_parsed) is None:
+			messagebox.showerror('Error', 'Invalid Project name!\n' + \
+				'valid chars: "A"-"Z", "a"-"z", "_"')
 			return
 		frame.destroy()
 		root.title('{} - {}'.format(TITLE, project_name_parsed))
