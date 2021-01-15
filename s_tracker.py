@@ -12,13 +12,14 @@ WORKSPACE = './workspace'
 ICON_FILE = './resources/icon.ico'
 TITLE = 'S. Tracker'
 
-def load_progress(user_input, filename: str):
+def load_progress(user_input, project: str):
 	'''
 		if filename csv exists load it as df
 		else create empty df
 	'''
+	filename = project + '.csv'
 	filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), \
-		WORKSPACE, f'{filename}.csv')
+		WORKSPACE, filename)
 	if os.path.exists(filepath):
 		df = get_progress(user_input, pd.read_csv(filepath))
 	else:
@@ -70,17 +71,18 @@ def update_progress(user_input, df):
 				}, index=[0])
 	return df.append(df_new)
 
-def save_progress(df, filename: str):
+def save_progress(df, project: str):
 	'''
 		save df as csv
 	'''
 	path = os.path.join(os.path.dirname(os.path.abspath(__file__)), WORKSPACE)
 	if not os.path.exists(path):
 		os.mkdir(path)
-	filepath = os.path.join(path, f'{filename}.csv')
+	filename = project + '.csv'
+	filepath = os.path.join(path, filename)
 	df.to_csv(filepath, index=False)
 	messagebox.showinfo('Information', 
-						'File was saved successfully.\n{}').format(filepath)
+						f'File was saved successfully.\n{os.path.join(WORKSPACE, filename)}')
 
 def main():
 
@@ -176,7 +178,7 @@ def main():
 		project_name_parsed = project_name.get().strip()
 		# validate project name
 		if not project_name_parsed:
-			messagebox.showerror('Error', 'Null Project was selected!')
+			messagebox.showerror('Error', 'Null Project!')
 			return
 		elif re.search(r'^[A-z_]+$', project_name_parsed) is None:
 			messagebox.showerror('Error', 'Invalid Project name!\n' + \
@@ -364,7 +366,7 @@ def main():
 		# Project placeholder
 		topframe = Frame(main_frame)
 		topframe.pack(padx=10, side=TOP)
-		project_label = Label(topframe, text='Selected project:')
+		project_label = Label(topframe, text='Project:')
 		project_label.pack(padx=10, pady = 10, side='left') 
 		project_placeholder = Label(topframe, width=14, textvariable=project_name, 
 									relief=RIDGE, anchor=W, state='disabled')
