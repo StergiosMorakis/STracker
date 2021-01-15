@@ -131,12 +131,13 @@ def main():
 			curr_window.destroy()
 			enableChildren(main_frame)
 
-		disableChildren(main_frame)
 		path = os.path.join(os.path.dirname(os.path.abspath(__file__)), WORKSPACE)
 		if not os.path.exists(path):
 			os.mkdir(path)
+		disableChildren(main_frame)
 		new_project_window = Toplevel(root) 
 		new_project_window.title('Create New Project')
+		new_project_window.protocol("WM_DELETE_WINDOW", lambda: cancel_naming_project(main_frame, new_project_window))
 		topframe_tmp = Frame(new_project_window)
 		topframe_tmp.pack(padx=10, side=TOP)
 		new_project_frame = Label(topframe_tmp, text ='New Project Name:')
@@ -144,6 +145,7 @@ def main():
 		project_name_tmp = StringVar()
 		project_entry = Entry(topframe_tmp, width=16, textvariable=project_name_tmp)
 		project_entry.pack(padx=10, pady = 10, side='right')
+		project_entry.focus_set()
 		bottomframe_tmp = Frame(new_project_window)
 		bottomframe_tmp.pack(side=BOTTOM)
 		buttonframe_new = Frame(bottomframe_tmp)
@@ -174,7 +176,7 @@ def main():
 		project_name_parsed = project_name.get().strip()
 		# validate project name
 		if not project_name_parsed:
-			messagebox.showerror('Error', 'Null Project Name!')
+			messagebox.showerror('Error', 'Null Project was selected!')
 			return
 		elif re.search(r'^[A-z_]+$', project_name_parsed) is None:
 			messagebox.showerror('Error', 'Invalid Project name!\n' + \
@@ -213,7 +215,7 @@ def main():
 		def process_input(project):
 			hours = hours_entry.get().strip()
 			if not hours:
-				messagebox.showerror('Error', '"Hours" value cannot be null!')
+				messagebox.showerror('Error', '"Hours" value is mandatory!')
 				return
 			else:				
 				try:
@@ -362,10 +364,11 @@ def main():
 		# Project placeholder
 		topframe = Frame(main_frame)
 		topframe.pack(padx=10, side=TOP)
-		project_label = Label(topframe, text='Project:')
+		project_label = Label(topframe, text='Selected project:')
 		project_label.pack(padx=10, pady = 10, side='left') 
-		project_entry = Entry(topframe, width=20, textvariable=project_name, state='disabled')
-		project_entry.pack(padx=10, pady = 10, side='right') 
+		project_placeholder = Label(topframe, width=14, textvariable=project_name, 
+									relief=RIDGE, anchor=W, state='disabled')
+		project_placeholder.pack(padx=10, pady = 10, side='right') 
 
 		# Button Section
 		bottomframe = Frame(main_frame, width=480)
